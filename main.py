@@ -12,6 +12,8 @@ tle = open('tle.txt', 'r')
 tle_lines = tle.readlines()
 tle.close()
 
+passes_out = open("passes.txt", 'w')
+
 # create satellite object
 satellite = ephem.readtle(tle_lines[0], tle_lines[1], tle_lines[2])
 
@@ -57,10 +59,21 @@ for i in positions:
     print("EL AT START" + str((m.alt / ephem.degree)))
     print("AZ AT START" + str((m.az / ephem.degree)))
     pass_now = True
+    passes_out.write("NEW PASS:")
+    passes_out.write("START TIME: " + str(timelist[counter]) + "\n")
+    passes_out.write("EL AT START: " + str((m.alt / ephem.degree)) + "\n")
+    passes_out.write("AZ AT START: " + str((m.az / ephem.degree)) + "\n")
   if m.alt < 0 and pass_now == True:
     print("END OF PASS:")
     print("END TIME: " + str(timelist[counter]))
     print("EL AT END" + str((m.alt / ephem.degree)))
     print("AZ AT END" + str((m.az / ephem.degree)))
+    passes_out.write("END OF PASS:\n")
+    passes_out.write("END TIME: " + str(timelist[counter]) + "\n")
+    passes_out.write("EL AT END" + str((m.alt / ephem.degree)) + "\n")
+    passes_out.write("AZ AT END" + str((m.az / ephem.degree)) + "\n")
+
     pass_now = False
   counter = counter + 1
+
+passes_out.close()
